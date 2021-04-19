@@ -1,7 +1,6 @@
 #!/bin/bash
 
-LAUNCH_TEMPLATE=lt-02226ebae5fbef5f3	# Ohio
-#LAUNCH_TEMPLATE=lt-09d74bbb3e4da1ff9	# N. Virginia
+LAUNCH_TEMPLATE=lt-0a87e286967856102	
 
 function start_instances
 {
@@ -302,15 +301,17 @@ function prepare_algorand_payload
 function sync_payload
 {
 	echo "Uploading payload to S3"
-	aws s3 rm --quiet --recursive s3://prism-binary/payload
-	aws s3 sync --quiet payload s3://prism-binary/payload
+	aws s3 rm --quiet --recursive s3://prism101/payload
+	aws s3 sync --quiet payload s3://prism101/payload
 	echo "Downloading payload on each instance"
 	execute_on_all get_payload
 }
 
 function get_payload_single
 {
-	ssh $1 -- "rm -f /home/ubuntu/*.tar.gz && rm -rf /home/ubuntu/payload && wget https://prism-binary.s3.amazonaws.com/payload/$1.tar.gz -O local.tar.gz && wget https://prism-binary.s3.amazonaws.com/payload/common.tar.gz && mkdir -p /home/ubuntu/payload && tar xf local.tar.gz -C /home/ubuntu/payload && tar xf common.tar.gz -C /home/ubuntu/payload"
+	echo "hello"
+	echo $1
+	ssh $1 -- "rm -f /home/ubuntu/*.tar.gz && rm -rf /home/ubuntu/payload && wget https://prism101.s3.amazonaws.com/payload/$1.tar.gz -O local.tar.gz && wget https://prism101.s3.amazonaws.com/payload/common.tar.gz && mkdir -p /home/ubuntu/payload && tar xf local.tar.gz -C /home/ubuntu/payload && tar xf common.tar.gz -C /home/ubuntu/payload"
 }
 
 function install_perf_single
